@@ -4,7 +4,7 @@
 	<groupId>nabu</groupId>
 	<artifactId>eai-module-authentication-remote</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0-SNAPSHOT</version>
+	<version>${nabu-eai-module-authentication-remote-version}</version>
 	<name>eai-module-authentication-remote</name>
 	<url>http://nabu.be</url>
 

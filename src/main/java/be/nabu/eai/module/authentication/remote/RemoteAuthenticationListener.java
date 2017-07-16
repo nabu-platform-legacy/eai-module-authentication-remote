@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import be.nabu.eai.module.keystore.KeyStoreArtifact;
 import be.nabu.eai.module.web.application.WebApplication;
 import be.nabu.eai.module.web.application.WebApplicationUtils;
+import be.nabu.libs.authentication.impl.ImpersonateToken;
 import be.nabu.libs.events.api.EventHandler;
 import be.nabu.libs.http.HTTPCodes;
 import be.nabu.libs.http.HTTPException;
@@ -96,11 +97,12 @@ public class RemoteAuthenticationListener implements EventHandler<HTTPRequest, H
 				existingSession.destroy();
 			}
 			// set the token in the session
-			JWTToken jwtToken = new JWTToken(decode, application.getRealm());
+			JWTToken jwtToken = new JWTToken(decode);
 			if (jwtToken.getValidUntil().before(new Date())) {
 				throw new HTTPException(400, "Expired");
 			}
-			newSession.set(GlueListener.buildTokenName(application.getRealm()), jwtToken);
+			ImpersonateToken impersonateToken = new ImpersonateToken(jwtToken, application.getRealm(), jwtToken.getName());
+			newSession.set(GlueListener.buildTokenName(application.getRealm()), impersonateToken);
 			List<Header> responseHeaders = new ArrayList<Header>();
 			// set the correct headers to update the session
 			responseHeaders.add(HTTPUtils.newSetCookieHeader(GlueListener.SESSION_COOKIE, newSession.getId(), null, application.getCookiePath(), null, secure, true));
