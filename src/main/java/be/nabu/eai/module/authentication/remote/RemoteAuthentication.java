@@ -64,7 +64,7 @@ public class RemoteAuthentication extends JAXBArtifact<RemoteAuthenticationConfi
 	}
 	@Override
 	public boolean isStarted(WebApplication artifact, String path) {
-		return false;
+		return subscriptions.containsKey(getKey(artifact, path));
 	}
 
 }

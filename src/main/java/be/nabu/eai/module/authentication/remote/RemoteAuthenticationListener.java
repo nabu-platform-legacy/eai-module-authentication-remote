@@ -79,6 +79,9 @@ public class RemoteAuthenticationListener implements EventHandler<HTTPRequest, H
 	public HTTPResponse handle(HTTPRequest request) {
 		try {
 			boolean secure = application.getConfiguration().getVirtualHost().getConfiguration().getServer().getConfiguration().getKeystore() != null;
+			if (application.getConfig().getVirtualHost().getConfig().getServer().getConfig().isProxied()) {
+				secure = application.getConfig().getVirtualHost().getConfig().getServer().getConfig().isProxySecure();
+			}
 			URI uri = HTTPUtils.getURI(request, secure);
 			Map<String, List<String>> queryProperties = URIUtils.getQueryProperties(uri);
 			List<String> token = queryProperties.get("token");
